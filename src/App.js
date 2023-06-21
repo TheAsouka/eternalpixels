@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import logo from './logo.svg';
 import Canvas from './Canvas';
 import "./App.css"
 import Toolbar from './Toolbar';
+import Navigation from './Navigation';
+import { ethers } from 'ethers'
 
 const App = () => {
 
@@ -13,14 +15,34 @@ const App = () => {
     setSelectedColor(color);
   };
 
+  const [provider, setProvider] = useState(null)
+  const [account, setAccount] = useState(null)
+
+  const loadBlockchainData = async () => {
+    //Blockchain connection
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    //const provider = new ethers.BrowserProvider(window.ethereum)
+    setProvider(provider)
+
+    const network = await provider.getNetwork()
+    console.log("NETWORK : ", network)
+
+    //Refresh account automatically on page
+    window.ethereum.on('accountsChanged', async () => {
+      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' })
+      const account = ethers.utils.getAddress(accounts[0])
+      setAccount(account)
+    })
+  }
+
+  useEffect(() => {
+    loadBlockchainData()
+  }, [])
+
 
   return (
     <div className='App'>
-      <header className='App-header'>
-        <h1 >
-          <img src={logo} className="App-logo" alt="logo" />
-          Eternal Pixels</h1>
-      </header>
+      <Navigation account={account} setAccount={setAccount} />
       <Toolbar colors={colors} selectedColor={selectedColor} handleColorSelection={handleColorSelection} />
       <Canvas selectedColor={selectedColor} />
     </div>

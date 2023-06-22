@@ -9,7 +9,7 @@ import { ethers } from 'ethers'
 const App = () => {
 
   const [selectedColor, setSelectedColor] = useState('red');
-  const colors = ['white', 'red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet'];
+  const colors = ['white', 'red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet', 'black'];
 
   const handleColorSelection = (color) => {
     setSelectedColor(color);
@@ -21,7 +21,6 @@ const App = () => {
   const loadBlockchainData = async () => {
     //Blockchain connection
     const provider = new ethers.providers.Web3Provider(window.ethereum)
-    //const provider = new ethers.BrowserProvider(window.ethereum)
     setProvider(provider)
 
     const network = await provider.getNetwork()

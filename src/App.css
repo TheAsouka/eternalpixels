@@ -107,3 +107,29 @@ body {
 .nav__connect:hover {
   background-color: #61DAFB;
 }
+
+
+
+.confirm {
+  width: 200px;
+  height: 50px;
+  margin: auto;
+  margin-top: 20px;
+
+  color: white;
+  background-color: #1c1f23;
+
+  border: 1px;
+  border-color: #61DAFB;
+  border-radius: 4px;
+
+  font-size: 1.4em;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: all 250ms ease;
+}
+
+.confirm:hover {
+  background-color: #61DAFB;
+}

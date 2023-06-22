@@ -3,11 +3,12 @@ import React, { useState, useRef, useEffect } from 'react';
 const Canvas = ({ selectedColor }) => {
     const canvasRef = useRef(null);
     const [pixels, setPixels] = useState([]);
+    const [isMouseDown, setIsMouseDown] = useState(false);
 
     //const colors = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet'];
     const pixelSize = 25;
-    const canvasWidth = 10;
-    const canvasHeight = 10;
+    const canvasWidth = 11;
+    const canvasHeight = 11;
     const borderColor = '#000000';
 
     useEffect(() => {
@@ -26,13 +27,23 @@ const Canvas = ({ selectedColor }) => {
         }
     }, [pixels]);
 
+
+    const handleMouseMove = (e) => {
+        if (isMouseDown) {
+            const rect = canvasRef.current.getBoundingClientRect();
+            const x = Math.floor((e.clientX - rect.left) / pixelSize);
+            const y = Math.floor((e.clientY - rect.top) / pixelSize);
+            handlePixelClick(x, y);
+        }
+    };
+
     const handlePixelClick = (x, y) => {
         // Met à jour la couleur du pixel cliqué
         const newPixels = [...pixels];
         //Random color
         //newPixels[x + y * (canvasWidth)] = colors[Math.floor(Math.random() * colors.length)];
         console.log(selectedColor)
-        if (selectedColor == "white") {
+        if (selectedColor === "white") {
             newPixels[x + y * (canvasWidth)] = undefined;
             setPixels(newPixels);
             console.log(newPixels);
@@ -43,7 +54,12 @@ const Canvas = ({ selectedColor }) => {
             setPixels(newPixels);
             console.log(newPixels);
         }
+
     };
+
+    const handleConfirmClick = () => {
+        console.log("CLICK")
+    }
 
     return (
         <div>
@@ -53,16 +69,25 @@ const Canvas = ({ selectedColor }) => {
                 ref={canvasRef}
                 width={canvasWidth * pixelSize}
                 height={canvasHeight * pixelSize}
+                onMouseDown={() => setIsMouseDown(true)}
+                onMouseUp={() => setIsMouseDown(false)}
+                onMouseLeave={() => setIsMouseDown(false)}
+                onMouseMove={handleMouseMove}
                 onClick={(e) => {
                     const rect = canvasRef.current.getBoundingClientRect();
                     const x = Math.floor((e.clientX - rect.left) / pixelSize);
                     const y = Math.floor((e.clientY - rect.top) / pixelSize);
                     handlePixelClick(x, y);
-                    console.log(x, y)
                 }}
             />
+            <button type="button" className='confirm' onClick={handleConfirmClick}>Confirm</button>
         </div>
     );
 };
+
+
+
+
+
 
 export default Canvas;

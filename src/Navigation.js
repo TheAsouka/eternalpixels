@@ -15,7 +15,7 @@ const Navigation = ({ account, setAccount }) => {
             <div className='App-header'>
 
                 <img src={logo} className="App-logo" alt="logo" />
-                <h1 >Eternal Pixels</h1>
+                <h1 >Ethernal Pixels</h1>
 
                 {account ? (
                     <button

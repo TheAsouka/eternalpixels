@@ -12,6 +12,33 @@ async function main() {
     await ethernal.deployed()
 
     console.log(`Deployed ${NAME} Contract at: ${ethernal.address}\n`)
+
+    const pixels = [
+        {
+            id: 0,
+            x: 0,
+            y: 0,
+            color: "red"
+        }
+    ]
+
+    for (var i = 0; i < pixels.length; i++) {
+        const transaction = await ethernal.connect(deployer).createPixel(
+            pixels[i].id,
+            pixels[i].x,
+            pixels[i].y,
+            pixels[i].color
+        )
+        await transaction.wait()
+
+        console.log("Pixel OK")
+    }
+
+    const transaction = await ethernal.getAllPixels()
+    //await transaction.wait()
+    console.log(transaction)
+
+
 }
 
 main().catch((error) => {

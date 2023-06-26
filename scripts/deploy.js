@@ -19,6 +19,12 @@ async function main() {
             x: 0,
             y: 0,
             color: "red"
+        },
+        {
+            id: 1,
+            x: 0,
+            y: 100,
+            color: "blue"
         }
     ]
 

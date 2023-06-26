@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { ethers } from 'ethers'
 
-const Canvas = ({ selectedColor }) => {
+const Canvas = ({ selectedColor, ethernal, provider }) => {
     const canvasRef = useRef(null);
     const [pixels, setPixels] = useState([]);
     const [isMouseDown, setIsMouseDown] = useState(false);
@@ -50,15 +51,21 @@ const Canvas = ({ selectedColor }) => {
             console.log("PIXEL RESET !")
 
         } else {
+            console.log(x, y, selectedColor)
             newPixels[x + y * (canvasWidth)] = selectedColor;
             setPixels(newPixels);
             console.log(newPixels);
         }
 
+        return x, y
+
     };
 
-    const handleConfirmClick = () => {
+    const handleConfirmClick = async (_id, _x, _y, _color) => {
         console.log("CLICK")
+        const signer = await provider.getSigner()
+        const transaction = await ethernal.connect(signer).createPixel(_id, _x, _y, _color, { value: 0 })
+        await transaction.wait()
     }
 
     return (
@@ -78,6 +85,7 @@ const Canvas = ({ selectedColor }) => {
                     const x = Math.floor((e.clientX - rect.left) / pixelSize);
                     const y = Math.floor((e.clientY - rect.top) / pixelSize);
                     handlePixelClick(x, y);
+                    handleConfirmClick(11, x, y, selectedColor);
                 }}
             />
             <button type="button" className='confirm' onClick={handleConfirmClick}>Confirm</button>

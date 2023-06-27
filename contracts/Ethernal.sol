@@ -6,11 +6,10 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 contract Ethernal is ERC721 {
     address public owner;
     uint256 public totalPixels; //Pixel counter, start at 0 by default
+    uint256 public pixelCreationCost = 0.1 ether;
 
 
     struct Pixel {
-        //ID will be the index of the pixel in array
-        uint256 id;
         uint256 x;
         uint256 y;
         string color;
@@ -30,23 +29,30 @@ contract Ethernal is ERC721 {
         _;
     }
 
-    function createPixel(uint256 _id, uint256 _x, uint256 _y, string memory _color) public {
+    function createPixel(uint256 _x, uint256 _y, string memory _color) public {
         // Effectuer les vérifications nécessaires, par exemple l'authentification de l'utilisateur
         
         // Créer un nouveau pixel avec les coordonnées et la couleur fournies
-        Pixel memory newPixel = Pixel(_id, _x, _y, _color);
+        Pixel memory newPixel = Pixel(_x, _y, _color);
         
         // Ajouter le pixel à la liste des pixels
         pixels.push(newPixel);
         
         // Émettre un événement pour signaler la création du pixel
-        emit PixelCreated(_id, _x, _y, _color);
+        emit PixelCreated(_x, _y, _color);
     }
 
-    event PixelCreated(uint256 id, uint256 indexed x, uint256 indexed y, string color);
+    event PixelCreated(uint256 indexed x, uint256 indexed y, string color);
 
     function getAllPixels() public view returns (Pixel[] memory) {
         return pixels;
+    }
+
+    function createPixels(Pixel[] memory _pixels) public payable {
+        for (uint256 i = 0; i < _pixels.length; i++) {
+            // Créer le pixel dans la blockchain
+            createPixel(_pixels[i].x, _pixels[i].y, _pixels[i].color);
+        }
     }
 
 

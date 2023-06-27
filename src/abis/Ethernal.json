@@ -69,12 +69,6 @@
         "anonymous": false,
         "inputs": [
             {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "id",
-                "type": "uint256"
-            },
-            {
                 "indexed": true,
                 "internalType": "uint256",
                 "name": "x",
@@ -162,11 +156,6 @@
         "inputs": [
             {
                 "internalType": "uint256",
-                "name": "_id",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
                 "name": "_x",
                 "type": "uint256"
             },
@@ -187,16 +176,41 @@
         "type": "function"
     },
     {
+        "inputs": [
+            {
+                "components": [
+                    {
+                        "internalType": "uint256",
+                        "name": "x",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "y",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "color",
+                        "type": "string"
+                    }
+                ],
+                "internalType": "struct Ethernal.Pixel[]",
+                "name": "_pixels",
+                "type": "tuple[]"
+            }
+        ],
+        "name": "createPixels",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
         "inputs": [],
         "name": "getAllPixels",
         "outputs": [
             {
                 "components": [
-                    {
-                        "internalType": "uint256",
-                        "name": "id",
-                        "type": "uint256"
-                    },
                     {
                         "internalType": "uint256",
                         "name": "x",
@@ -310,6 +324,19 @@
         "type": "function"
     },
     {
+        "inputs": [],
+        "name": "pixelCreationCost",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
         "inputs": [
             {
                 "internalType": "uint256",
@@ -319,11 +346,6 @@
         ],
         "name": "pixels",
         "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "id",
-                "type": "uint256"
-            },
             {
                 "internalType": "uint256",
                 "name": "x",

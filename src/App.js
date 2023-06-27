@@ -29,6 +29,9 @@ const App = () => {
   const [provider, setProvider] = useState(null)
   const [account, setAccount] = useState(null)
   const [ethernal, setEthernal] = useState(null)
+  const [pixelarray, setPixelArray] = useState(null)
+
+  const [isLoading, setIsLoading] = useState(true);
 
   const loadBlockchainData = async () => {
     //Blockchain connection
@@ -51,6 +54,7 @@ const App = () => {
     //Get Pixels from blockchain
     const pixelArray = await ethernal.getAllPixels()
     console.log(pixelArray)
+    setPixelArray(pixelArray)
 
     //Refresh account automatically on page
     window.ethereum.on('accountsChanged', async () => {
@@ -59,7 +63,9 @@ const App = () => {
       setAccount(account)
     })
 
-    return ethernal
+    //Permet d'attendre que les data de la blockchain soit chargées avant de rendre le canvas.
+    setIsLoading(false);
+
   }
 
   useEffect(() => {
@@ -71,7 +77,11 @@ const App = () => {
     <div className='App'>
       <Navigation account={account} setAccount={setAccount} />
       <Toolbar colors={colors} selectedColor={selectedColor} handleColorSelection={handleColorSelection} />
-      <Canvas selectedColor={selectedColor} ethernal={ethernal} provider={provider} />
+      {isLoading ? (
+        <div className='App-header'>Chargement en cours...</div>
+      ) : (
+        <Canvas selectedColor={selectedColor} ethernal={ethernal} provider={provider} pixelArray={pixelarray} />
+      )}
     </div>
   );
 };

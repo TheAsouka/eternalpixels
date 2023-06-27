@@ -13,38 +13,38 @@ async function main() {
 
     console.log(`Deployed ${NAME} Contract at: ${ethernal.address}\n`)
 
-    const pixels = [
+    const etherValue = (n) => {
+        return ethers.utils.parseUnits(n.toString(), 'ether')
+    }
+
+    const editablePixels = [
         {
-            id: 0,
             x: 0,
             y: 0,
             color: "red"
         },
         {
-            id: 1,
             x: 0,
-            y: 100,
-            color: "blue"
+            y: 1,
+            color: "yellow"
         }
     ]
 
-    for (var i = 0; i < pixels.length; i++) {
-        const transaction = await ethernal.connect(deployer).createPixel(
-            pixels[i].id,
-            pixels[i].x,
-            pixels[i].y,
-            pixels[i].color
-        )
-        await transaction.wait()
+    const numPixels = editablePixels.length;
+    const pixelCost = ethers.utils.parseEther((numPixels * 0.1).toString());
 
-        console.log("Pixel OK")
-    }
+    const pixelsToSend = editablePixels.map(pixel => ({
+        x: pixel.x,
+        y: pixel.y,
+        color: pixel.color
+    }));
 
-    const transaction = await ethernal.getAllPixels()
-    //await transaction.wait()
-    console.log(transaction)
+    console.log(pixelsToSend)
 
 
+    const transaction = await ethernal.connect(deployer).createPixels(pixelsToSend, { value: pixelCost })
+    await transaction.wait()
+    console.log("Pixels created !")
 }
 
 main().catch((error) => {

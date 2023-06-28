@@ -53,7 +53,6 @@ const App = () => {
 
     //Get Pixels from blockchain
     const pixelArray = await ethernal.getAllPixels()
-    console.log(pixelArray)
     setPixelArray(pixelArray)
 
     //Refresh account automatically on page

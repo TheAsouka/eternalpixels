@@ -45,6 +45,18 @@ async function main() {
     const transaction = await ethernal.connect(deployer).createPixels(pixelsToSend, { value: pixelCost })
     await transaction.wait()
     console.log("Pixels created !")
+
+    const balance = await ethers.provider.getBalance(deployer.address);
+    const balanceInEther = ethers.utils.formatEther(balance);
+    console.log("Balanc of deployer before withdraw : ", balanceInEther)
+    const contractBalance = await ethers.provider.getBalance(ethernal.address);
+    console.log("Balance of contract ", ethers.utils.formatEther(contractBalance))
+
+    /*
+    transactionWithdraw = await ethernal.connect(deployer).withdraw()
+    await transactionWithdraw.wait()
+    const balanceAfter = await ethers.provider.getBalance(deployer.address)
+    console.log("Balanc of deployer after withdraw : ", ethers.utils.formatEther(balanceAfter))*/
 }
 
 main().catch((error) => {

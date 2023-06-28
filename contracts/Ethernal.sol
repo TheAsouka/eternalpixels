@@ -29,10 +29,10 @@ contract Ethernal is ERC721 {
         _;
     }
 
-    function createPixel(uint256 _x, uint256 _y, string memory _color) public {
-        // Effectuer les vérifications nécessaires, par exemple l'authentification de l'utilisateur
+
+    function createPixel(uint256 _x, uint256 _y, string memory _color) internal {
         
-        // Créer un nouveau pixel avec les coordonnées et la couleur fournies
+        // Créer un nouveau pixel avec les coordonnées et la couleur fournie
         Pixel memory newPixel = Pixel(_x, _y, _color);
         
         // Ajouter le pixel à la liste des pixels
@@ -48,8 +48,24 @@ contract Ethernal is ERC721 {
         return pixels;
     }
 
+    function pixelExists(uint256 _x, uint256 _y) public view returns (bool) {
+        for (uint256 i = 0; i < pixels.length; i++) {
+            if (pixels[i].x == _x && pixels[i].y == _y) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     function createPixels(Pixel[] memory _pixels) public payable {
+        // Effectuer la transaction en utilisant le montant envoyé
+        // qui correspond au prix par pixel multiplié par le nombre de pixels
+        // Les ethers sont envoyés au contrat par defaut
+        uint256 totalPrice = pixelCreationCost * _pixels.length;
+        require(msg.value >= totalPrice, "Insufficient funds");
+
         for (uint256 i = 0; i < _pixels.length; i++) {
+            require(!pixelExists(_pixels[i].x, _pixels[i].y), "Pixel already exists");
             // Créer le pixel dans la blockchain
             createPixel(_pixels[i].x, _pixels[i].y, _pixels[i].color);
         }

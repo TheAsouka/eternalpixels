@@ -8,6 +8,7 @@ const Canvas = ({ selectedColor, ethernal, provider, pixelArray }) => {
 
 
 
+
     //const colors = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet'];
     const pixelSize = 25;
     const canvasWidth = 11;
@@ -68,23 +69,45 @@ const Canvas = ({ selectedColor, ethernal, provider, pixelArray }) => {
 
     const handlePixelClick = (x, y) => {
         const newEditablePixels = [...editablePixels];
-        const existingPixelIndex = newEditablePixels.findIndex(p => p.x === x && p.y === y);
+        //Empeche de créer des pixels invisible
+        if (x >= 0 && x < canvasWidth && y >= 0 && y < canvasHeight) {
+            const existingPixelIndex = newEditablePixels.findIndex((p) => p.x === x && p.y === y);
 
-        if (selectedColor === 'white') {
-            // L'utilisateur a sélectionné la couleur blanche, on supprime le pixel s'il existe
-            if (existingPixelIndex !== -1) {
-                newEditablePixels.splice(existingPixelIndex, 1);
+
+            // A revoir, le tableau ne se met pas à jour avec un refresh de page
+            // Il faut vider le tableau et le refresh avec les data de la blockchain constament
+            // Créer un tableau de pixels non éditables à partir de pixelArray
+            const nonEditablePixels = pixelArray.map((pixel) => ({
+                x: Number(pixel.x),
+                y: Number(pixel.y),
+                color: pixel.color,
+            }));
+
+            const isNonEditablePixel = nonEditablePixels.some(
+                (pixel) => pixel.x === x && pixel.y === y
+            );
+
+            if (isNonEditablePixel) {
+                console.log("Pixel already in blockchain.")
+                return;
             }
-        } else {
-            // L'utilisateur a sélectionné une couleur différente de blanche
-            if (existingPixelIndex !== -1) {
-                // Le pixel existe déjà, on met à jour sa couleur
-                const updatedPixel = { ...newEditablePixels[existingPixelIndex], color: selectedColor };
-                newEditablePixels[existingPixelIndex] = updatedPixel;
+
+            if (selectedColor === 'white') {
+                // L'utilisateur a sélectionné la couleur blanche, on supprime le pixel s'il existe
+                if (existingPixelIndex !== -1) {
+                    newEditablePixels.splice(existingPixelIndex, 1);
+                }
             } else {
-                // Le pixel n'existe pas, on l'ajoute avec la couleur sélectionnée
-                const newPixel = { x, y, color: selectedColor };
-                newEditablePixels.push(newPixel);
+                // L'utilisateur a sélectionné une couleur différente de blanche
+                if (existingPixelIndex !== -1) {
+                    // Le pixel existe déjà, on met à jour sa couleur
+                    const updatedPixel = { ...newEditablePixels[existingPixelIndex], color: selectedColor };
+                    newEditablePixels[existingPixelIndex] = updatedPixel;
+                } else {
+                    // Le pixel n'existe pas, on l'ajoute avec la couleur sélectionnée
+                    const newPixel = { x, y, color: selectedColor };
+                    newEditablePixels.push(newPixel);
+                }
             }
         }
 
@@ -94,10 +117,15 @@ const Canvas = ({ selectedColor, ethernal, provider, pixelArray }) => {
         setEditablePixels(newEditablePixels);
     };
 
+
+
+
+
+
     const handleConfirmClick = async () => {
         if (editablePixels.length < 1) {
             // Afficher un message d'erreur ou empêcher l'exécution de la transaction
-            alert("Dessine d'abord frère.")
+            alert("You didn't draw any pixel.")
             return;
         }
         const signer = await provider.getSigner();
@@ -108,7 +136,7 @@ const Canvas = ({ selectedColor, ethernal, provider, pixelArray }) => {
         // Vérifier que l'utilisateur dispose de suffisamment de fonds pour les pixels
         const balance = await provider.getBalance(account);
         if (balance.lt(pixelCost)) {
-            alert("Solde insuffisant pour créer les pixels");
+            alert(`Insufficient funds to create ${numPixels} pixel(s)`);
             return;
         }
 

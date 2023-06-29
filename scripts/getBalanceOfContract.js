@@ -5,7 +5,6 @@ async function getContractBalance() {
 
     // Créez une instance du contrat en utilisant son adresse
     const contract = await ethers.getContractAt('Ethernal', contractAddress);
-    console.log(contract)
 
     // Récupérez la balance du contrat en ethers
     const balance = await ethers.provider.getBalance(contract.address);

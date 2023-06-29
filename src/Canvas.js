@@ -1,13 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ethers } from 'ethers'
+import { ethers } from 'ethers';
+import Swal from 'sweetalert2';
 
 const Canvas = ({ selectedColor, ethernal, provider, pixelArray }) => {
     const canvasRef = useRef(null);
     const [isMouseDown, setIsMouseDown] = useState(false);
     const [editablePixels, setEditablePixels] = useState([]);
-
-
-
 
     //const colors = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet'];
     const pixelSize = 25;
@@ -15,9 +13,6 @@ const Canvas = ({ selectedColor, ethernal, provider, pixelArray }) => {
     const canvasHeight = 11;
     const borderColor = '#000000';
 
-    const isPixelColored = (x, y) => {
-        return pixelArray.some(p => p.x === x && p.y === y);
-    };
 
     const drawPixel = (ctx, x, y, color) => {
         ctx.fillStyle = color;
@@ -118,16 +113,18 @@ const Canvas = ({ selectedColor, ethernal, provider, pixelArray }) => {
     };
 
 
-
-
-
-
     const handleConfirmClick = async () => {
         if (editablePixels.length < 1) {
             // Afficher un message d'erreur ou empêcher l'exécution de la transaction
-            alert("You didn't draw any pixel.")
+            Swal.fire({
+                icon: 'error',
+                title: "You didn't draw any pixel",
+                text: "Please edit some pixels",
+                showCancelButton: true,
+            })
             return;
         }
+
         const signer = await provider.getSigner();
         const account = await signer.getAddress();
         const numPixels = editablePixels.length;
@@ -147,19 +144,40 @@ const Canvas = ({ selectedColor, ethernal, provider, pixelArray }) => {
             color: pixel.color
         }));
 
-        // Afficher une alerte avec le nombre de pixels qui seront envoyés à la blockchain
-        alert(`Vous êtes sur le point de créer ${numPixels} pixel(s) dans la blockchain.\nCoût total : ${ethers.utils.formatEther(pixelCost)} ETH`);
+        Swal.fire({
+            icon: 'warning',
+            title: 'Confirmer la transaction',
+            text: `Vous êtes sur le point de créer ${numPixels} pixel(s) dans la blockchain.\nCoût total : ${ethers.utils.formatEther(pixelCost)} ETH`,
+            showCancelButton: true,
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    // Appeler la fonction createPixels du contrat dans la blockchain
+                    const transaction = await ethernal.connect(signer).createPixels(pixelsToSend, { value: pixelCost });
+                    await transaction.wait();
 
-        // Appeler la fonction createPixel du contrat dans la blockchain
-        const transaction = await ethernal.connect(signer).createPixels(pixelsToSend, { value: pixelCost });
-        await transaction.wait();
-
-        // Réinitialiser le tableau editablePixels après avoir créé les pixels dans la blockchain
-        setEditablePixels([]);
-
-        // Rafraîchir la page pour afficher les nouveaux pixels depuis la blockchain. (Pas ouf fonctionne à moitié)
-        window.location.reload();
-
+                    // Afficher la notification de succès
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Transaction validée',
+                        text: 'Nouveaux pixels ajoutés avec succès !',
+                    }).then((result) => {
+                        // Recharger la page après avoir cliqué sur "OK"
+                        if (result.isConfirmed) {
+                            window.location.reload();
+                        }
+                    });
+                } catch (error) {
+                    // Gérer l'erreur et afficher un message approprié
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Erreur de transaction',
+                        text: 'La transaction a échoué. Veuillez réessayer ultérieurement. (Check the nonce)',
+                    });
+                    console.error(error);
+                }
+            }
+        });
     };
 
     return (

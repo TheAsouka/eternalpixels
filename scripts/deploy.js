@@ -50,7 +50,7 @@ async function main() {
     const balanceInEther = ethers.utils.formatEther(balance);
     console.log("Balanc of deployer before withdraw : ", balanceInEther)
     const contractBalance = await ethers.provider.getBalance(ethernal.address);
-    console.log("Balance of contract ", ethers.utils.formatEther(contractBalance))
+    console.log("Balance of contract :", ethers.utils.formatEther(contractBalance), "ETH")
 
     /*
     transactionWithdraw = await ethernal.connect(deployer).withdraw()

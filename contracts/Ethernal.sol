@@ -24,7 +24,7 @@ contract Ethernal is ERC721 {
     }
 
     modifier onlyOwner(){
-        require(msg.sender == owner);
+        require(msg.sender == owner,"You are not the owner.");
         // _; -> Function body -> modifier is checked before function is executed
         _;
     }

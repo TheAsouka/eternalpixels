@@ -16,8 +16,8 @@
 
 ## Setting Up
 ### 1. Clone/Download the Repository
-`$ git clone https://github.com/TheAsouka/eternalpixels.git`
-`$ cd eternalpixels`
+- `$ git clone https://github.com/TheAsouka/eternalpixels.git`
+- `$ cd eternalpixels`
 
 ### 2. Install Dependencies:
 `$ npm install`
@@ -41,9 +41,9 @@ Reset your nonce on metamask or use a custom one (Metamask/Settings/Advanced set
 ## Change
 ### 1. Canva size
 You can change de Canva size by editing values at :
-`src/components/Canvas.js`
-`line 12 => const canvasWidth = 22;`
-`line 13 => const canvasHeight = 50;`
+- `src/components/Canvas.js`
+- `line 12 => const canvasWidth = 22;`
+- `line 13 => const canvasHeight = 50;`
 
 ### 2. Pixel cost
 You can change cost of a pixel at :
@@ -61,7 +61,7 @@ If you change anything in the smart contract :
 
 ## Metamask setup
 Ensure you have a local network configured as follow :
-![alt text](https://github.com/TheAsouka/eternalpixels/img/metamask_localhost.png "Localhost Metamask")
+![alt text](https://github.com/TheAsouka/eternalpixels/blob/main/img/metamask_localhost.png "Localhost Metamask")
 
 ## Improvements
 - Gas cost efficiency

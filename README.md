@@ -48,7 +48,7 @@ Once you have metamask installed and configured with a local network :
 - Click "Confirm" button.
 
 ## Metamask setup
-Ensure you have a local network configured as follow :
+Ensure you have a local network configured as follow :  
 <img src="https://github.com/TheAsouka/eternalpixels/blob/main/img/metamask_localhost.png" width="360" height="558">
 
 ## Change

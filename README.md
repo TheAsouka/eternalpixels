@@ -1,4 +1,6 @@
 # EternalPixels
+This app is a decentralized pixel drawing application powered by blockchain technology. Users can create, color, and own pixels on a shared canvas. The app integrates with MetaMask for authentication and to interact with the blockchain.  
+The app leverages React.js for the frontend, Hardhat for blockchain integration and tests, and Solidity for smart contract development.
 
 ## Technology Stack & Tools
 
@@ -73,12 +75,11 @@ If you change anything in the smart contract :
 - Paste it into `src/abis/Ethernal.json`
 
 
-
-
-
 ## Improvements
 - Gas cost efficiency
 - User interface
 - Handle uncaught runtime error (provider is null) if metamask is not installed (App.js)
 - Better handling of rendering Canva after a successfull transaction
+- Mapping pixel owners and pixels and display address by hovering a pixel
+- Deploy on testnet
 - ...

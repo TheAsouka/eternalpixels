@@ -38,6 +38,19 @@ In a separate terminal execute:
 ### 7. In case of transaction error
 Reset your nonce on metamask or use a custom one (Metamask/Settings/Advanced settings)
 
+## Usage
+Once you have metamask installed and configured with a local network :
+- Connect Metamask to local network
+- Import an hardhat account by using private key
+![alt text](https://github.com/TheAsouka/eternalpixels/blob/main/img/hardhat_accounts.png "Hardhat accounts")
+- Click "Connect" button on front-end
+- Do some pixel art
+- Click "Confirm" button.
+
+## Metamask setup
+Ensure you have a local network configured as follow :
+![alt text](https://github.com/TheAsouka/eternalpixels/blob/main/img/metamask_localhost.png "Localhost Metamask")
+
 ## Change
 ### 1. Canva size
 You can change de Canva size by editing values at :
@@ -57,11 +70,9 @@ If you change anything in the smart contract :
 - Deploy it using `$ npx hardhat run ./scripts/deploy.js --network localhost` it will be complied again.
 - Then go to `artifacts/contracts/Ethernal.sol/Ethernal.json`, copy the array after `abi : [...]` and paste it into `src/abis/Ethernal.json`
 
-## Usage
 
-## Metamask setup
-Ensure you have a local network configured as follow :
-![alt text](https://github.com/TheAsouka/eternalpixels/blob/main/img/metamask_localhost.png "Localhost Metamask")
+
+
 
 ## Improvements
 - Gas cost efficiency

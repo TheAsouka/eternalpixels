@@ -47,15 +47,15 @@ You can change de Canva size by editing values at :
 
 ### 2. Pixel cost
 You can change cost of a pixel at :
-`contracts/Ethernal.sol`
-`line 9 => uint256 public pixelCreationCost = 0.1 ether;`
-`src/components/Canvas.js`
-`line 129 => const pixelCost = ethers.utils.parseEther((numPixels * 0.1).toString());`
+- `contracts/Ethernal.sol`
+- `line 9 => uint256 public pixelCreationCost = 0.1 ether;`
+- `src/components/Canvas.js`
+- `line 129 => const pixelCost = ethers.utils.parseEther((numPixels * 0.1).toString());`
 
 ### 3. Editing smart contract
 If you change anything in the smart contract :
-Deploy it using `$ npx hardhat run ./scripts/deploy.js --network localhost` it will be complied again.
-Then go to `artifacts/contracts/Ethernal.sol/Ethernal.json`, copy the array after `abi : [...]` and paste it into `src/abis/Ethernal.json`
+- Deploy it using `$ npx hardhat run ./scripts/deploy.js --network localhost` it will be complied again.
+- Then go to `artifacts/contracts/Ethernal.sol/Ethernal.json`, copy the array after `abi : [...]` and paste it into `src/abis/Ethernal.json`
 
 ## Usage
 

@@ -7,10 +7,10 @@ const Canvas = ({ selectedColor, ethernal, provider, pixelArray }) => {
     const [isMouseDown, setIsMouseDown] = useState(false);
     const [editablePixels, setEditablePixels] = useState([]);
 
-    //const colors = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet'];
+
     const pixelSize = 25;
-    const canvasWidth = 11;
-    const canvasHeight = 11;
+    const canvasWidth = 22;
+    const canvasHeight = 50;
     const borderColor = '#000000';
 
 
@@ -29,21 +29,21 @@ const Canvas = ({ selectedColor, ethernal, provider, pixelArray }) => {
         // Clear canvas
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // Dessiner les pixels éditables (blancs)
+        // Draw base canvas
         for (let i = 0; i < canvasHeight; i++) {
             for (let j = 0; j < canvasWidth; j++) {
                 drawPixel(ctx, j, i, 'white');
             }
         }
 
-        // Dessiner les pixels en cours d'édition
+        // Draw pixels being edited
         for (let i = 0; i < editablePixels.length; i++) {
             const pixel = editablePixels[i];
             const { x, y, color } = pixel;
             drawPixel(ctx, x, y, color);
         }
 
-        // Dessiner les pixels de la blockchain
+        // Draw pixel from blockchain
         for (let i = 0; i < pixelArray.length; i++) {
             const pixel = pixelArray[i];
             const { x, y, color } = pixel;
@@ -64,14 +64,13 @@ const Canvas = ({ selectedColor, ethernal, provider, pixelArray }) => {
 
     const handlePixelClick = (x, y) => {
         const newEditablePixels = [...editablePixels];
-        //Empeche de créer des pixels invisible
+        //Avoid creating pixels outside of the canvas.
         if (x >= 0 && x < canvasWidth && y >= 0 && y < canvasHeight) {
             const existingPixelIndex = newEditablePixels.findIndex((p) => p.x === x && p.y === y);
 
-
-            // A revoir, le tableau ne se met pas à jour avec un refresh de page
-            // Il faut vider le tableau et le refresh avec les data de la blockchain constament
-            // Créer un tableau de pixels non éditables à partir de pixelArray
+            // To improve.
+            // Sometimes canva isn't updated correctly after a refresh
+            // create an non editable array from pixelArray (blockchain data)
             const nonEditablePixels = pixelArray.map((pixel) => ({
                 x: Number(pixel.x),
                 y: Number(pixel.y),
@@ -88,25 +87,24 @@ const Canvas = ({ selectedColor, ethernal, provider, pixelArray }) => {
             }
 
             if (selectedColor === 'white') {
-                // L'utilisateur a sélectionné la couleur blanche, on supprime le pixel s'il existe
+                // If user select white, delete the pixel if it exist
                 if (existingPixelIndex !== -1) {
                     newEditablePixels.splice(existingPixelIndex, 1);
                 }
             } else {
-                // L'utilisateur a sélectionné une couleur différente de blanche
                 if (existingPixelIndex !== -1) {
-                    // Le pixel existe déjà, on met à jour sa couleur
+                    // Pixel already exist, update the color
                     const updatedPixel = { ...newEditablePixels[existingPixelIndex], color: selectedColor };
                     newEditablePixels[existingPixelIndex] = updatedPixel;
                 } else {
-                    // Le pixel n'existe pas, on l'ajoute avec la couleur sélectionnée
+                    // Pixel doesn't exist, add it to the array
                     const newPixel = { x, y, color: selectedColor };
                     newEditablePixels.push(newPixel);
                 }
             }
         }
 
-        //Retourne tableau de dict
+        //Array of dict
         console.log(newEditablePixels);
 
         setEditablePixels(newEditablePixels);
@@ -115,12 +113,10 @@ const Canvas = ({ selectedColor, ethernal, provider, pixelArray }) => {
 
     const handleConfirmClick = async () => {
         if (editablePixels.length < 1) {
-            // Afficher un message d'erreur ou empêcher l'exécution de la transaction
             Swal.fire({
                 icon: 'error',
                 title: "You didn't draw any pixel",
-                text: "Please edit some pixels",
-                showCancelButton: true,
+                text: "Please edit some pixels before confirming.",
             })
             return;
         }
@@ -130,14 +126,18 @@ const Canvas = ({ selectedColor, ethernal, provider, pixelArray }) => {
         const numPixels = editablePixels.length;
         const pixelCost = ethers.utils.parseEther((numPixels * 0.1).toString());
 
-        // Vérifier que l'utilisateur dispose de suffisamment de fonds pour les pixels
+        // Check if user balance is greater than total cost
         const balance = await provider.getBalance(account);
         if (balance.lt(pixelCost)) {
-            alert(`Insufficient funds to create ${numPixels} pixel(s)`);
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: `Insufficient funds to create ${numPixels} pixel(s)`,
+            })
             return;
         }
 
-        // Créer un tableau de pixels à partir du tableau editablePixels
+        // Create array of pixels from editablePixels array
         const pixelsToSend = editablePixels.map(pixel => ({
             x: pixel.x,
             y: pixel.y,
@@ -146,33 +146,33 @@ const Canvas = ({ selectedColor, ethernal, provider, pixelArray }) => {
 
         Swal.fire({
             icon: 'warning',
-            title: 'Confirmer la transaction',
-            text: `Vous êtes sur le point de créer ${numPixels} pixel(s) dans la blockchain.\nCoût total : ${ethers.utils.formatEther(pixelCost)} ETH`,
+            title: 'Confirm transaction',
+            text: `You are about to send ${numPixels} pixel(s) in the blockchain.\nTotal cost : ${ethers.utils.formatEther(pixelCost)} ETH`,
             showCancelButton: true,
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    // Appeler la fonction createPixels du contrat dans la blockchain
+                    // Call the createPixels fonction of the smart contract
                     const transaction = await ethernal.connect(signer).createPixels(pixelsToSend, { value: pixelCost });
                     await transaction.wait();
 
-                    // Afficher la notification de succès
+                    // Success alert
                     Swal.fire({
                         icon: 'success',
-                        title: 'Transaction validée',
-                        text: 'Nouveaux pixels ajoutés avec succès !',
+                        title: 'Transaction validated',
+                        text: 'New pixels have been added to the blockchain !',
                     }).then((result) => {
-                        // Recharger la page après avoir cliqué sur "OK"
+                        // Refresh page after clicking "OK"
                         if (result.isConfirmed) {
                             window.location.reload();
                         }
                     });
                 } catch (error) {
-                    // Gérer l'erreur et afficher un message approprié
+                    // Error handling
                     Swal.fire({
                         icon: 'error',
-                        title: 'Erreur de transaction',
-                        text: 'La transaction a échoué. Veuillez réessayer ultérieurement. (Check the nonce)',
+                        title: 'Transaction failed',
+                        text: 'Check the nonce',
                     });
                     console.error(error);
                 }
@@ -182,6 +182,7 @@ const Canvas = ({ selectedColor, ethernal, provider, pixelArray }) => {
 
     return (
         <div>
+            <button type="button" className='confirm' onClick={handleConfirmClick}>Confirm</button>
             <canvas
                 id="grid"
                 className='App-Canvas'

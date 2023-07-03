@@ -1,5 +1,6 @@
 import { ethers } from 'ethers'
-import logo from './logo.svg';
+import logo from '../style/logo.svg';
+import foxlogo from '../style/MetaMask_Fox.png';
 
 const Navigation = ({ account, setAccount }) => {
     const connectHandler = async () => {
@@ -15,7 +16,7 @@ const Navigation = ({ account, setAccount }) => {
             <div className='App-header'>
 
                 <img src={logo} className="App-logo" alt="logo" />
-                <h1 >Ethernal Pixels</h1>
+                <h1 >Eternal Pixels</h1>
 
                 {account ? (
                     <button
@@ -31,6 +32,7 @@ const Navigation = ({ account, setAccount }) => {
                         onClick={connectHandler}
                     >
                         Connect
+                        <img src={foxlogo} alt="Foxlogo" className="nav__logo" />
                     </button>
                 )}
             </div>

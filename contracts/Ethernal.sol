@@ -15,7 +15,7 @@ contract Ethernal is ERC721 {
         string color;
     }
 
-    // id => struct
+    // Another solution is to use a mapping
     //mapping(uint256 => Pixel) public pixels;
     Pixel[] public pixels;
 
@@ -32,13 +32,15 @@ contract Ethernal is ERC721 {
 
     function createPixel(uint256 _x, uint256 _y, string memory _color) internal {
         
-        // Créer un nouveau pixel avec les coordonnées et la couleur fournie
+        // Create a new pixel with coordinates and color
         Pixel memory newPixel = Pixel(_x, _y, _color);
         
-        // Ajouter le pixel à la liste des pixels
+        //Add the new pixel to the list of pixels
         pixels.push(newPixel);
+
+        totalPixels++;
         
-        // Émettre un événement pour signaler la création du pixel
+        // Emit an event to signal that a new pixel has been created
         emit PixelCreated(_x, _y, _color);
     }
 
@@ -58,17 +60,21 @@ contract Ethernal is ERC721 {
     }
 
     function createPixels(Pixel[] memory _pixels) public payable {
-        // Effectuer la transaction en utilisant le montant envoyé
-        // qui correspond au prix par pixel multiplié par le nombre de pixels
-        // Les ethers sont envoyés au contrat par defaut
+        // Perform the transaction using the sent amount
+        // corresponding to the price per pixel multiplied by the number of pixels
+        // Ethers are sent to the contract balance by default
         uint256 totalPrice = pixelCreationCost * _pixels.length;
         require(msg.value >= totalPrice, "Insufficient funds");
 
         for (uint256 i = 0; i < _pixels.length; i++) {
             require(!pixelExists(_pixels[i].x, _pixels[i].y), "Pixel already exists");
-            // Créer le pixel dans la blockchain
             createPixel(_pixels[i].x, _pixels[i].y, _pixels[i].color);
         }
+    }
+
+    function pixelNumber() public view returns(uint) {
+        // Return the number of pixels currently in the blockchain
+        return totalPixels;
     }
 
 

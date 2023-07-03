@@ -36,7 +36,7 @@ describe("Ethernal", () => {
     //Before each test run this code
     //New contract is deployed for each test...
     beforeEach(async () => {
-        //Setup accounts - pas compris getSigners
+        //Setup accounts
         [deployer, buyer] = await ethers.getSigners()
         //console.log(deployer.address)
 
@@ -92,7 +92,7 @@ describe("Ethernal", () => {
             const transaction = await ethernal.connect(deployer).createPixel(0, 3, "red")
             //Test is not working : TypeError: ethernal.connect(...).createPixel is not a function
             // So it works in some way
-            expect(transaction).to.fail
+            expect(transaction).to.fail;
         })
     })
 
@@ -111,10 +111,10 @@ describe("Ethernal", () => {
 
         it("User can't withdraw", async () => {
             const transaction = await ethernal.connect(buyer).withdraw()
-            //const errorMessage = "'You are not the owner.'"
+            const errorMessage = "You are not the owner."
             //const errorMessage = "VM Exception while processing transaction: reverted with reason string 'You are not the owner.'"
             //Still not working...
-            expect(transaction).to.be.revertedWith('You are not the owner.')
+            expect(transaction).to.be.revertedWith(errorMessage);
         })
 
         it("Updates the owner balance", async () => {
@@ -128,10 +128,3 @@ describe("Ethernal", () => {
         })
     })
 })
-
-
-//Test withdraw owner
-//Test withdraw user (fail)
-//Contract balance
-//Test use createPixel (fail) -> internal
-//

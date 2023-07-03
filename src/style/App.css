@@ -115,6 +115,7 @@ body {
   height: 50px;
   margin: auto;
   margin-top: 20px;
+  margin-bottom: 20px;
 
   color: white;
   background-color: #1c1f23;
@@ -132,4 +133,11 @@ body {
 
 .confirm:hover {
   background-color: #61DAFB;
+}
+
+.nav__logo {
+  width: 40px;
+  height: 40px;
+  margin-left: 10px;
+
 }

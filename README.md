@@ -1,70 +1,69 @@
-# Getting Started with Create React App
+# EternalPixels
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Technology Stack & Tools
 
-## Available Scripts
+- Solidity (Writing Smart Contracts & Tests)
+- Javascript (React & Testing)
+- [NodeJS](https://nodejs.org/en/) v18.16.0
+- [Hardhat](https://hardhat.org/) v 2.12.7 (Development Framework)
+- [Ethers.js](https://docs.ethers.io/v5/) v5.7.2 (Blockchain Interaction)
+- [React.js](https://reactjs.org/) (Frontend Framework)
+- [MetaMask](https://metamask.io/)
 
-In the project directory, you can run:
+## Requirements For Initial Setup
+- Install [NodeJS](https://nodejs.org/en/). Recommended to use the LTS version.
+- Install [MetaMask](https://metamask.io/) on your browser.
 
-### `npm start`
+## Setting Up
+### 1. Clone/Download the Repository
+`$ git clone https://github.com/TheAsouka/eternalpixels.git`
+`$ cd eternalpixels`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### 2. Install Dependencies:
+`$ npm install`
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### 3. Run tests
+`$ npx hardhat test`
 
-### `npm test`
+### 4. Start Hardhat node
+`$ npx hardhat node`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 5. Run deployment script
+In a separate terminal execute:
+`$ npx hardhat run ./scripts/deploy.js --network localhost`
 
-### `npm run build`
+### 6. Start frontend
+`$ npm run start`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### 7. In case of transaction error
+Reset your nonce on metamask or use a custom one (Metamask/Settings/Advanced settings)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Change
+### 1. Canva size
+You can change de Canva size by editing values at :
+`src/components/Canvas.js`
+`line 12 => const canvasWidth = 22;`
+`line 13 => const canvasHeight = 50;`
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### 2. Pixel cost
+You can change cost of a pixel at :
+`contracts/Ethernal.sol`
+`line 9 => uint256 public pixelCreationCost = 0.1 ether;`
+`src/components/Canvas.js`
+`line 129 => const pixelCost = ethers.utils.parseEther((numPixels * 0.1).toString());`
 
-### `npm run eject`
+### 3. Editing smart contract
+If you change anything in the smart contract :
+Deploy it using `$ npx hardhat run ./scripts/deploy.js --network localhost` it will be complied again.
+Then go to `artifacts/contracts/Ethernal.sol/Ethernal.json`, copy the array after `abi : [...]` and paste it into `src/abis/Ethernal.json`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Usage
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Metamask setup
+Ensure you have a local network configured as follow :
+![alt text](https://github.com/TheAsouka/eternalpixels/img/metamask_localhost.png "Localhost Metamask")
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Improvements
+- Gas cost efficiency
+- User interface
+- ...

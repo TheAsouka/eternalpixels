@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { ethers } from 'ethers'
+import Swal from 'sweetalert2';
 
 //Components
-import Canvas from './Canvas';
-import "./App.css"
-import Toolbar from './Toolbar';
-import Navigation from './Navigation';
+import Canvas from './components/Canvas';
+import "./style/App.css"
+import Toolbar from './components/Toolbar';
+import Navigation from './components/Navigation';
 
 // ABIs
 import Ethernal from './abis/Ethernal.json';
@@ -15,6 +16,7 @@ import Ethernal from './abis/Ethernal.json';
 import config from './config.json'
 
 const App = () => {
+
 
   //Default color is red
   const [selectedColor, setSelectedColor] = useState('red');
@@ -35,7 +37,16 @@ const App = () => {
 
   const loadBlockchainData = async () => {
     //Blockchain connection
-    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    //Check if metamask is installed
+    const provider = window.ethereum ? new ethers.providers.Web3Provider(window.ethereum) : null;
+    if (!provider) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Metamask not installed',
+        text: `Please install Metamask in your browser. \nhttps://metamask.io/download/`,
+      })
+    }
+
     setProvider(provider)
 
     const network = await provider.getNetwork()
@@ -62,22 +73,25 @@ const App = () => {
       setAccount(account)
     })
 
-    //Permet d'attendre que les data de la blockchain soit chargées avant de rendre le canvas.
+    // Wait for blockchain data to be loaded before rendering canva.
     setIsLoading(false);
 
   }
 
   useEffect(() => {
+    //Change title (tab)
+    document.title = 'EternalPixels';
     loadBlockchainData()
   }, [])
 
 
   return (
+    //isLoading ensure that blockchain data is loaded before rendering canva.
     <div className='App'>
       <Navigation account={account} setAccount={setAccount} />
       <Toolbar colors={colors} selectedColor={selectedColor} handleColorSelection={handleColorSelection} />
       {isLoading ? (
-        <div className='App-header'>Chargement en cours...</div>
+        <div className='App-header'>Loading blockchain data...</div>
       ) : (
         <Canvas selectedColor={selectedColor} ethernal={ethernal} provider={provider} pixelArray={pixelarray} />
       )}

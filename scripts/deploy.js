@@ -13,10 +13,14 @@ async function main() {
 
     console.log(`Deployed ${NAME} Contract at: ${ethernal.address}\n`)
 
+
+
+
     const etherValue = (n) => {
         return ethers.utils.parseUnits(n.toString(), 'ether')
     }
 
+    //Comment this to avoid sending default (test) pixels in blockchain
     const editablePixels = [
         {
             x: 0,
@@ -46,17 +50,6 @@ async function main() {
     await transaction.wait()
     console.log("Pixels created !")
 
-    const balance = await ethers.provider.getBalance(deployer.address);
-    const balanceInEther = ethers.utils.formatEther(balance);
-    console.log("Balanc of deployer before withdraw : ", balanceInEther)
-    const contractBalance = await ethers.provider.getBalance(ethernal.address);
-    console.log("Balance of contract :", ethers.utils.formatEther(contractBalance), "ETH")
-
-    /*
-    transactionWithdraw = await ethernal.connect(deployer).withdraw()
-    await transactionWithdraw.wait()
-    const balanceAfter = await ethers.provider.getBalance(deployer.address)
-    console.log("Balanc of deployer after withdraw : ", ethers.utils.formatEther(balanceAfter))*/
 }
 
 main().catch((error) => {

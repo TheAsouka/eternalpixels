@@ -41,7 +41,7 @@ Reset your nonce on metamask or use a custom one (Metamask/Settings/Advanced set
 ## Usage
 Once you have metamask installed and configured with a local network :
 - Connect Metamask to local network
-- Import an hardhat account by using private key
+- Import an hardhat account by private key in Metamask (account #0 is the deployer)
 ![alt text](https://github.com/TheAsouka/eternalpixels/blob/main/img/hardhat_accounts.png "Hardhat accounts")
 - Click "Connect" button on front-end
 - Do some pixel art
@@ -68,7 +68,9 @@ You can change cost of a pixel at :
 ### 3. Editing smart contract
 If you change anything in the smart contract :
 - Deploy it using `$ npx hardhat run ./scripts/deploy.js --network localhost` it will be complied again.
-- Then go to `artifacts/contracts/Ethernal.sol/Ethernal.json`, copy the array after `abi : [...]` and paste it into `src/abis/Ethernal.json`
+- Then go to `artifacts/contracts/Ethernal.sol/Ethernal.json`
+- Copy the array after `abi : [...]` 
+- Paste it into `src/abis/Ethernal.json`
 
 
 
@@ -77,4 +79,6 @@ If you change anything in the smart contract :
 ## Improvements
 - Gas cost efficiency
 - User interface
+- Handle uncaught runtime error (provider is null) if metamask is not installed (App.js)
+- Better handling of rendering Canva after a successfull transaction
 - ...

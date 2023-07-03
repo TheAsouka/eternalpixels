@@ -43,9 +43,10 @@ const App = () => {
       Swal.fire({
         icon: 'error',
         title: 'Metamask not installed',
-        text: `Please install Metamask in your browser. \nhttps://metamask.io/download/`,
+        text: `Please install Metamask in your browser before continuing. \nhttps://metamask.io/download/`,
       })
     }
+
 
     setProvider(provider)
 

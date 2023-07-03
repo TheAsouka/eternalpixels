@@ -43,14 +43,13 @@ Once you have metamask installed and configured with a local network :
 - Connect Metamask to local network
 - Import an hardhat account by private key in Metamask (account #0 is the deployer)
 <img src="https://github.com/TheAsouka/eternalpixels/blob/main/img/hardhat_accounts.png" width="360" height="360">
-![alt text](https://github.com/TheAsouka/eternalpixels/blob/main/img/hardhat_accounts.png "Hardhat accounts")
 - Click "Connect" button on front-end
 - Do some pixel art
 - Click "Confirm" button.
 
 ## Metamask setup
 Ensure you have a local network configured as follow :
-![alt text](https://github.com/TheAsouka/eternalpixels/blob/main/img/metamask_localhost.png "Localhost Metamask")
+<img src="https://github.com/TheAsouka/eternalpixels/blob/main/img/metamask_localhost.png" width="360" height="558">
 
 ## Change
 ### 1. Canva size

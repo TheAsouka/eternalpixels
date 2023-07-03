@@ -42,7 +42,7 @@ Reset your nonce on metamask or use a custom one (Metamask/Settings/Advanced set
 Once you have metamask installed and configured with a local network :
 - Connect Metamask to local network
 - Import an hardhat account by private key in Metamask (account #0 is the deployer)
-![alt text](https://github.com/TheAsouka/eternalpixels/blob/main/img/hardhat_accounts.png "Hardhat accounts")
+![alt text](https://github.com/TheAsouka/eternalpixels/blob/main/img/hardhat_accounts.png "Hardhat accounts" | width=360px height=360px)
 - Click "Connect" button on front-end
 - Do some pixel art
 - Click "Confirm" button.
